@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-local": "NEXT_PUBLIC_VISUALIZER_URL='http://local.immersionanalytics.ai:8080' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
