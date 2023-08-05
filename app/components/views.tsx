@@ -2,7 +2,7 @@ import { ArrowsDownUp, ArrowsOutCardinal } from "@phosphor-icons/react";
 import { MdOutlineAdsClick } from "react-icons/md";
 
 export function Instructions() {
-    return <div className="instructions">
+    return <div className="instructions p-5">
         <h2 className="border-b border-neutral-500">Instructions</h2>
 
         <p><ArrowsOutCardinal className="inline-icon"/> <b>Drag mouse</b> to orbit around the visualization</p>

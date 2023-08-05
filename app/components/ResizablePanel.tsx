@@ -4,12 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 
 interface ResizablePanelProps {
   children: React.ReactNode
-  width: number
+  initialWidth: number
   minWidth: number
   handleLeft?: boolean
   handleRight?: boolean
   className?: string
-  // onWidthChange?: (newWidth: number) => void  
+  onWidthChanged?: (width: number) => void  
 }
 
 interface ResizeHandleProps {
@@ -36,37 +36,40 @@ function ResizeHandle({position, onMouseDown}: ResizeHandleProps) {
         className={outerCss + " absolute cursor-col-resize z-10"}
         onMouseDown={e => onMouseDown(position, e)} 
       >
-        <div className={innerCss + " absolute rounded-full"} />
+        <div className={innerCss + " absolute rounded-full"} >
+          {/* <div className="w-1 h-5 border-x border-neutral-400/20 -translate-y-4 absolute top-1/2"></div> */}
+        </div>
       </div>
   )
 }
 
 export default function ResizablePanel({
   children,
-  width,
+  initialWidth,
   minWidth,
   handleLeft,
   handleRight,
-  // onWidthChange
+  onWidthChanged,
   className
 }: ResizablePanelProps) {
 
-  width = width ?? minWidth
+  // initialWidth = initialWidth ?? minWidth
 
-  const [innerWidth, setInnerWidth] = useState(width)
+  const [innerWidth, setInnerWidth] = useState(initialWidth)
 
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    setInnerWidth(width)
-  }, [width])
+    setInnerWidth(initialWidth)
+  }, [initialWidth])
 
   function handleMouseDown(position:'left'|'right', e: React.MouseEvent) {
 
     e.preventDefault()
 
     const startX = e.clientX
-    const startWidth = ref.current!.getBoundingClientRect().width
+    // const startWidth = ref.current!.getBoundingClientRect().width
+    const startWidth = innerWidth;
     
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
@@ -76,9 +79,9 @@ export default function ResizablePanel({
       const newWidth = Math.max(minWidth, startWidth + delta)
       
       setInnerWidth(newWidth)
-      // if (onWidthChange)
-      //   onWidthChange(newWidth)
       e.preventDefault();
+
+      onWidthChanged?.(newWidth)
     }
 
     function handleMouseUp() {

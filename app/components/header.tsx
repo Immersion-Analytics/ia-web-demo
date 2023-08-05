@@ -14,10 +14,10 @@ export default function() {
                     </IALink>
                 </div>
                 <nav className="nav-buttons flex text-sm items-center gap-2 ml-auto uppercase">
-                    <IALink path="/learn-more">
+                    <IALink path="/">
                         Learn More
                     </IALink>
-                    <IALink path="/contact" className="accent-btn">
+                    <IALink path="/contact/" className="accent-btn">
                         Contact Us
                     </IALink>
                 </nav>

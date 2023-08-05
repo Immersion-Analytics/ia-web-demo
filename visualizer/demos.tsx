@@ -1,30 +1,34 @@
 
 import IA from 'ia-visualizer'
-import { playDataTubes, playNetworkGraph, playPortfolioManagement, playSurfaceViz } from "./viz-files";
+import { BarChartCode, NetworkGraphCode, PortfolioManagementCode, SurfacePlotCode, TimeseriesDataTubesCode } from './viz-files';
 
 export interface DemoInfo {
     name: string;
     description?: string;
-    play: (ia:IA) => void;
+    code: string
 }
 
 export function getDemos(): DemoInfo[] {
     return [
         {
             name: "Portfolio Management",
-            play: playPortfolioManagement
+            code: PortfolioManagementCode
         },
         {
             name: "Network Graph",
-            play: playNetworkGraph
+            code: NetworkGraphCode
         },
         {
             name: "Timeseries DataTubes",
-            play: playDataTubes
+            code: TimeseriesDataTubesCode
+        },
+        {
+            name: "Bar Chart",
+            code: BarChartCode
         },
         {
             name: "Surface",
-            play: playSurfaceViz
+            code: SurfacePlotCode
         }   
     ]
 
