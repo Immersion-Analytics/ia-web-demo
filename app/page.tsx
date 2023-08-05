@@ -42,7 +42,10 @@ export default function Home() {
   const rightSidebarTabs = [
     {
       name: "Javascript Code",
-      content: <CodeEditor ref={codeEditorRef} onPlay={playCode} />,
+      content: <CodeEditor ref={codeEditorRef}
+                           onPlay={playCode}
+                           initialCode={selectedDemo?.code}
+                           />,
       cssClassName: "bg-neutral-900/95",
     },
     {
@@ -53,7 +56,6 @@ export default function Home() {
 
 
   function selectDemo(demo: DemoInfo) {
-    console.log("Current demo, Selecting demo:", selectedDemo, demo)
     if (demo?.name == selectedDemo?.name)
       return
     console.log("Selecting demo:", demo)

@@ -23,13 +23,9 @@ export const CodeEditor = forwardRef<CodeEditorRef, CodeEditorProps>((p:CodeEdit
         setCode
     }))
 
-
     function onEditorChanged(newCode:string) {
         setCode(newCode);
     }
-
-
-    console.log("initializing code editor with code:", code)
 
     return (
     <div className={p.className + " "}>
