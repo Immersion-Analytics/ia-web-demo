@@ -2,14 +2,15 @@ import Image from "next/image";
 import { IALink } from "../ia-link";
 
 
-export default function() {
+export default function Header() {
+
     return (
 
         <header className="inset-panel z-50" style={{boxShadow:"0px 0px 20px rgba(0,0,20,1)"}}>
             <div className="flex items-stretch py-4 px-4">
                 <div className="items-start">
                     <IALink path="/" className="flex flex-row items-center space-x-2">
-                        <Image src="/images/ia-logo-with-text.png" width={200} height={50} alt="Immersion Analytics Logo" />
+                        <Image src={"./images/ia-logo-with-text.png"} width={200} height={50} alt="Immersion Analytics Logo" />
                         {/* <div className="block relative">IMMERSION ANALYTICS</div> */}
                     </IALink>
                 </div>

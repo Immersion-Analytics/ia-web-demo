@@ -48,3 +48,5 @@ export const CodeEditor = forwardRef<CodeEditorRef, CodeEditorProps>((p:CodeEdit
     </div>
     )
 })
+
+CodeEditor.displayName = "CodeEditor";

@@ -7,6 +7,7 @@
     "dev-local": "NEXT_PUBLIC_VISUALIZER_URL='http://local.immersionanalytics.ai:8080' next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "next build && aws s3 sync out s3://immersionanalytics.ai/demo/",
     "lint": "next lint"
   },
   "dependencies": {
