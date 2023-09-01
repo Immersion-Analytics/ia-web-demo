@@ -5,7 +5,7 @@ import Header from "./components/header"
 import Footer from "./components/footer"
 import { DemoInfo, getDemos } from "@/visualizer/demos"
 import { IAButton } from "./components/buttons"
-import { useState, useContext, createContext, useRef, useEffect } from "react"
+import {useState, useContext, createContext, useRef, useEffect, useCallback} from "react"
 import Sidebar from "./components/sidebar";
 import { Instructions } from "./components/views";
 import { CodeEditor, CodeEditorRef } from "./components/code-editor";
@@ -22,9 +22,9 @@ const LeftSidebarTabs = [
 
 
 export default function Home() {
-  const demos = getDemos();
+  const [demos, _] = useState(getDemos());
   const [selectedDemo, setSelectedDemo] = useState<null | DemoInfo>(null);
-  const [initialized, setInitialized] = useState(false);
+  const [iaReady, setIAReady] = useState(false);
   // const [code, setCode] = useState("");
   const codeEditorRef = useRef<CodeEditorRef>(null);
   
@@ -55,50 +55,72 @@ export default function Home() {
   ]
 
 
-  function selectDemo(demo: DemoInfo) {
+  const selectDemo = useCallback((demo: DemoInfo) => {
     if (demo?.name == selectedDemo?.name)
       return
     console.log("Selecting demo:", demo)
     setSelectedDemo(demo);
     codeEditorRef.current?.setCode(demo?.code);
     playCode(demo?.code);
-  }
+
+  }, [selectedDemo?.name]);
 
   // Select initial demo
   useEffect(() => {
     selectDemo(demos[1])
-    setInitialized(true)
-  }, [initialized])
+    // setInitialized(true)
+    IA.onReady(() => setIAReady(true))
+  }, [])
     
 
   return (
   <div className="flex flex-col">
     <div className="flex flex-col flex-grow h-screen gap-0 text-stone-400">
       <Header />
+      <div className="m-12">
+        <h2 className="text-2xl">Lorem ipsum dolor sit amet</h2>
+        <p className="my-2">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <h2 className="mt-12 text-2xl text-right">Sed ut perspiciatis unde</h2>
+        <p className="my-2">
+          omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
+          eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+        </p>
+
+      </div>
       <div className="relative flex flex-row gap-0 flex-grow min-h-[300px]">
-        <Sidebar id="left-sidebar"
+        {/*<Sidebar id="left-sidebar"
                 initialWidth={300} minWidth={100}
                 tabs={LeftSidebarTabs}
                 selected={LeftSidebarTabs[0]}
                 side="left"
                 />
+                */}
+        <Instructions className="w-1/3" />
         <main className="flex-grow h-full bg-black shadow-2xl">
           <Visualizer
                 className="flex-1 overflow-hidden w-full h-full"
                 demo={selectedDemo}
                 />
         </main>
-        <Sidebar id="right-sidebar"
+        {/*<Sidebar id="right-sidebar"
                 initialWidth={400} minWidth={100}
                 tabs={rightSidebarTabs}
                 selected={null}
                 side="right"
                 />
+                */}
+      </div>
+      <div className="my-2 mx-0 py-6 px-12 page-section rounded-lg">
+        {selectedDemo?.description}
       </div>
       <div className="demo-selector page-section z-50 flex justify-center w-full">
         {/* Outer and inner container to handle scrolling overflow without clipping left edge
         on narrow screens */}
-        <div className="p-10 flex flex-row gap-5 w-fit max-w-full overflow-x-scroll">
+        <div className={"p-10 flex flex-row gap-5 w-fit max-w-full overflow-x-scroll " + (iaReady ? "" : "disabled")}>
           { getDemos().map(demo => {
             return <DemoTile 
                       key={demo.name}
