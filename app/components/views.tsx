@@ -6,7 +6,7 @@ interface InstructionsProps {
 }
 
 export function Instructions(p:InstructionsProps) {
-    return <div className={"instructions p-5 " + p.className}>
+    return <div className={"instructions p-5 overflow-scroll " + p.className}>
         <h2 className="border-b border-neutral-500">Instructions</h2>
 
         <p><ArrowsOutCardinal className="inline-icon"/> <b>Drag mouse</b> to orbit around the visualization</p>

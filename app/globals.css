@@ -5,38 +5,57 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255; */
-  --foreground: #111;
-  --background: #fff;
-  --inset-color: rgba(0, 0, 0, 0.1);
-  --outset-color: rgba(255, 255, 255, 0.1);
-}
+/*:root {*/
+/*  !* --foreground-rgb: 0, 0, 0;*/
+/*  --background-start-rgb: 214, 219, 220;*/
+/*  --background-end-rgb: 255, 255, 255; *!*/
+/*  --foreground: #111;*/
+/*  --background: #fff;*/
+/*  --inset-color: rgba(0, 0, 0, 0.1);*/
+/*  --outset-color: rgba(255, 255, 255, 0.1);*/
+/*}*/
 
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {*/
   :root {
     /* --foreground-rgb: 255, 255, 255;
     --background-start-rgb: ;
     --background-end-rgb: 40, 40, 40; */
-    --foreground: #aaa;
-    --background: #111114;
-    --inset-color: rgba(255, 255, 255, 0.01);
-    --inset-shadow-color: rgba(0,0,0, 0.7);
-    --outset-color: rgba(0, 0, 0, 0.05);
   }
-}
+/*}*/
 
 @layer base {
-  html, body {
-    color: blue;
+  html[data-theme='light'] {
+    --color-fg-hard: 50 50 50;
+    --color-fg: 80 80 80;
+    --color-fg-soft: 120 120 120;
+    --color-bg: 240 240 240;
+    --color-inset: 200 200 200;
+    --color-inset-shadow: rgba(0,0,0, 0.2);
+    --color-outset: rgba(0, 0, 0, 0.05);
+    --color-active: 37 128 202;
+    --active-gradient: linear-gradient(to bottom, rgb(59, 135, 250), rgb(31, 119, 220));
+    /*--color-active: #2557ca;*/
+    --section-shadow-radius: 10px;
+  }
+
+  html[data-theme='dark'] {
+    --color-hard: 220 220 220;
+    --color-fg: 180 180 180;
+    --color-fg-soft: 120 120 120;
+    --color-bg: 20 20 20;
+    --color-inset: 255 255 255;
+    --color-inset-shadow: rgba(0,0,0, 0.9);
+    --color-outset: rgba(0, 0, 0, 0.05);
+    --color-active: 37 128 202;
+    --active-gradient: linear-gradient(to bottom, rgb(50, 120, 222), rgb(30, 104, 192));
+    --section-shadow-radius: 60px;
   }
 }
 
 
 html, body {
-  background-color: var(--background);
+  /*background-color: var(--background);*/
+  @apply bg-bg;
 
   /* Prevent scroll gestures from navigating away from the page
   * Could place enable this only for certain elements with mouse enter/exit JS handlers
@@ -50,15 +69,15 @@ html, body {
     )
     rgb(var(--background-start-rgb)); */
 
-  @apply font-light text-gray-300;
+  @apply font-light text-fg;
 }
 
 h1, h2, h3, h4 {
-  @apply font-normal text-gray-400 font-bold;
+  @apply font-normal text-fg font-bold;
 }
 
 .round-btn {
-  @apply px-4 py-1;
+  @apply px-3 py-1 whitespace-nowrap;
   @apply rounded-lg;
 }
 
@@ -69,19 +88,20 @@ h1, h2, h3, h4 {
 
 .accent-btn {
   /* background: linear-gradient(to bottom, #2557ca,#2557ca, #2657ca); */
-  background: linear-gradient(to bottom, rgb(50, 120, 222), rgb(30, 104, 192));
+  background: var(--active-gradient);
   /* box-shadow: 0 .5px .2px #ddd; */
   /* border-bottom: 1px solid #2a6add;
   border-top: 1px solid #2a6add; */
   /* border: 1px solid rgba(0,0,0,.9); */
   border-top: 1px solid #fff2;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 1);
+  /*box-shadow: 0px 0px 1px rgba(0, 0, 0, 1);*/
+  color: #e7e7e7 !important;
   /* border: 1px solid #28201f; */
 }
 
 nav > a {
   @apply round-btn;
-  @apply text-neutral-200 !important;
+  @apply text-fg-hard !important;
   /* @apply py-2; */
 }
 
@@ -109,14 +129,13 @@ b {
   @apply text-2xl;
 }
 
-.page-section {
-  background-color: var(--inset-color);
-  box-shadow: 0px 0px 60px 0px var(--inset-shadow-color);
+.inset-panel {
+  @apply bg-inset/5;
+  box-shadow: 0px 0px var(--section-shadow-radius) 0px var(--color-inset-shadow);
 }
 
-.inset-panel {
-  background-color: rgba(255, 255, 255, .03);
-  box-shadow: 0px 0px 60px 0px rgba(0, 0, 0, .8);
+.page-section {
+  @apply inset-panel;
 }
 
 .sidebar {
@@ -146,7 +165,7 @@ b {
 
 .demo-tile {
   /* @apply hover-btn; */
-  @apply text-white/90 bg-white/10;
+  @apply text-fg bg-inset;
   @apply text-2xl font-normal;
   @apply w-52 h-32 flex items-center text-center;
   /* @apply bg-black rounded-lg p-6 border border-gray-600 border-opacity-50; */

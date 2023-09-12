@@ -10,6 +10,7 @@ import Sidebar from "./components/sidebar";
 import { Instructions } from "./components/views";
 import { CodeEditor, CodeEditorRef } from "./components/code-editor";
 import IA from 'ia-visualizer'
+import {useTheme} from "next-themes";
 
 const LeftSidebarTabs = [
   {
@@ -20,6 +21,10 @@ const LeftSidebarTabs = [
 
 // const CodeContext = createContext<string | null>(null)
 
+function setIABackgroundColor(lightMode:boolean) {
+  const color = lightMode ? 'rgb(249, 249, 249)' : 'rgb(80, 80, 80)';
+  IA.onReady(() => IA.setBackgroundColor(lightMode, color));
+}
 
 export default function Home() {
   const [demos, _] = useState(getDemos());
@@ -27,8 +32,13 @@ export default function Home() {
   const [iaReady, setIAReady] = useState(false);
   // const [code, setCode] = useState("");
   const codeEditorRef = useRef<CodeEditorRef>(null);
-  
-  function playCode(code:string | null) {
+  const { theme, setTheme:_setTheme } = useTheme();
+
+  // Note, theme is returning undefined on the server at page load time, but value is set properly on the client
+  // the undefined check is a workaround
+  const lightMode = theme === 'light';// || theme === undefined;
+
+  const playCode = useCallback((code:string | null) => {
       console.log("Play code:", code)
 
       if (code)
@@ -36,7 +46,11 @@ export default function Home() {
           // Ensure code is not evaluated until Visualizer is ready
           IA.onReady(() => eval(code));
       }
-  }
+  }, [])
+
+  const setTheme = useCallback((theme:string) => {
+    _setTheme(theme);
+  }, []);
 
 
   const rightSidebarTabs = [
@@ -46,7 +60,7 @@ export default function Home() {
                            onPlay={playCode}
                            initialCode={selectedDemo?.code}
                            />,
-      cssClassName: "bg-neutral-900/95",
+      cssClassName: "bg-inset/20",
     },
     {
       name: "Legend",
@@ -65,18 +79,22 @@ export default function Home() {
 
   }, [selectedDemo?.name]);
 
-  // Select initial demo
+  // Set initial parameters
   useEffect(() => {
     selectDemo(demos[1])
     // setInitialized(true)
-    IA.onReady(() => setIAReady(true))
+    IA.onReady(() => { setIAReady(true); });
   }, [])
-    
+
+  // Update IA background color when theme changes
+  useEffect(() => {
+    setIABackgroundColor(lightMode);
+  }, [lightMode])
 
   return (
-  <div className="flex flex-col">
-    <div className="flex flex-col flex-grow h-screen gap-0 text-stone-400">
-      <Header />
+  <div className={"flex flex-col"}>
+    <div className="flex flex-col flex-grow gap-0">
+      <Header lightMode={lightMode} setLightMode={enabled => setTheme(enabled ? "light" : "dark")} />
       <div className="m-12">
         <h2 className="text-2xl">Lorem ipsum dolor sit amet</h2>
         <p className="my-2">consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -91,7 +109,7 @@ export default function Home() {
         </p>
 
       </div>
-      <div className="relative flex flex-row gap-0 flex-grow min-h-[300px]">
+      <div className="relative flex flex-row gap-0 page-section flex-grow min-h-[300px] h-[60vh] border-y border-fg/20">
         {/*<Sidebar id="left-sidebar"
                 initialWidth={300} minWidth={100}
                 tabs={LeftSidebarTabs}
@@ -99,8 +117,8 @@ export default function Home() {
                 side="left"
                 />
                 */}
-        <Instructions className="w-1/3" />
-        <main className="flex-grow h-full bg-black shadow-2xl">
+        <Instructions className="w-1/3 border-r border-fg/20" />
+        <main className="flex-grow h-full">
           <Visualizer
                 className="flex-1 overflow-hidden w-full h-full"
                 demo={selectedDemo}
@@ -114,7 +132,8 @@ export default function Home() {
                 />
                 */}
       </div>
-      <div className="my-2 mx-0 py-6 px-12 page-section rounded-lg">
+      <div className="my-0 mx-0 py-6 px-12">
+        <h3 className="mb-4">Demo Description</h3>
         {selectedDemo?.description}
       </div>
       <div className="demo-selector page-section z-50 flex justify-center w-full">
